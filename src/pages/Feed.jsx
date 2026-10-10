@@ -37,6 +37,7 @@ export default function Feed() {
           {posts.map((post) => (
             <Col key={post.id}>
               <Card as="article" className="h-100">
+                {post.image && <Card.Img variant="top" src={post.image} alt={post.title} />}
                 <Card.Body className="d-flex flex-column">
                   <Card.Title as="h3" className="">{post.title}</Card.Title>
                   <Card.Text className="flex-grow-1">{post.content}</Card.Text>
