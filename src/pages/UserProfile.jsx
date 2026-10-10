@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Col } from 'react-bootstrap';
 import { apiFetch } from '../services/helpers';
 import { useAuth } from '../context/AuthContext';
 export default function UserProfile() {
