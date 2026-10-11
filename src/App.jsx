@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Feed from './pages/Feed';
 import UserProfile from './pages/UserProfile';
+import Friends from './pages/Friends';
 import './App.css';
 
 function Layout(){
@@ -22,6 +23,7 @@ function Layout(){
           {session && (
             <Nav className="ms-auto">
               <Nav.Link as={NavLink} to="/" end>Feed</Nav.Link>
+              <Nav.Link as={NavLink} to="/friends">Friends</Nav.Link>
               <Nav.Link as={NavLink} to="/profile">Profile</Nav.Link>
               <button className="ghost" onClick={logout}>Log out</button>
             </Nav>
@@ -45,6 +47,7 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Feed />} />
               <Route path="/profile" element={<UserProfile />} />
+              <Route path="/friends" element={<Friends />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />
