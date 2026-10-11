@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { apiFetch } from '../services/helpers';
 import { useAuth } from '../context/AuthContext';
 import UserSearch from '../components/UserSearch';
@@ -11,6 +11,7 @@ export default function Friends() {
   const token = session.access_token;
   const [users, setUsers] = useState([]);
   const [friendships, setFriendships] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   function fetchFriendships() {
     return apiFetch('/friendships', { token }).then((data) =>
@@ -21,16 +22,26 @@ export default function Friends() {
   }
 
   useEffect(() => {
-    apiFetch('/users', { token }).then(setUsers);
-    fetchFriendships();
+    Promise.all([apiFetch('/users', { token }).then(setUsers), fetchFriendships()])
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <Container>
-      <h1>Friends</h1>
-      <FriendRequests users={users} friendships={friendships} fetchFriendships={fetchFriendships} />
-      <UserSearch users={users} friendships={friendships} fetchFriendships={fetchFriendships} />
-      <FriendsList users={users} friendships={friendships} fetchFriendships={fetchFriendships} />
-    </Container>
+    <>
+      <h1 className="fs-page-title">Your Party</h1>
+      {loading ? (
+        <p className="fs-muted">Loading your party...</p>
+      ) : (
+      <Row>
+        <Col xs={7}>
+          <FriendRequests users={users} friendships={friendships} fetchFriendships={fetchFriendships} />
+          <FriendsList users={users} friendships={friendships} fetchFriendships={fetchFriendships} />
+        </Col>
+        <Col xs={5}>
+          <UserSearch users={users} friendships={friendships} fetchFriendships={fetchFriendships} />
+        </Col>
+      </Row>
+      )}
+    </>
   );
 }

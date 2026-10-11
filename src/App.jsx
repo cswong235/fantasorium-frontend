@@ -1,37 +1,49 @@
 import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, Outlet } from 'react-router-dom';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import LogoutModal from './components/LogoutModal';
 import Login from './pages/Login';
 import Feed from './pages/Feed';
 import UserProfile from './pages/UserProfile';
 import Friends from './pages/Friends';
+import logo from './assets/Fantasorium.png';
 import './App.css';
 
 function Layout(){
-  const { logout, session } = useAuth();
+  const { session, user } = useAuth();
 
   return(
-    <>
-      <Navbar bg="dark" data-bs-theme="dark" className="mb-4">
-        <Container>
-          <Navbar.Brand as={Link} to="/">
-            <img src="/logohere.png" alt="Fantasorium" height="40" />
-          </Navbar.Brand>
+    <div className="fs-site" data-bs-theme="dark">
+      <header className="fs-banner">
+        <Link to="/">
+          <img src={logo} alt="Fantasorium" />
+        </Link>
+        <span className="fs-tagline">A tavern for adventurers, dungeon masters and dice goblins</span>
+      </header>
 
-          {/* Only show the page links once someone is logged in */}
-          {session && (
-            <Nav className="ms-auto">
+      <Navbar className="fs-nav">
+        {session && (
+          <>
+            <Nav>
               <Nav.Link as={NavLink} to="/" end>Feed</Nav.Link>
               <Nav.Link as={NavLink} to="/friends">Friends</Nav.Link>
               <Nav.Link as={NavLink} to="/profile">Profile</Nav.Link>
-              <button className="ghost" onClick={logout}>Log out</button>
             </Nav>
-          )}
-        </Container>
+            <span className="fs-nav-user">Logged in as <strong>{user.email}</strong></span>
+            <LogoutModal />
+          </>
+        )}
       </Navbar>
-      <Outlet/> 
-    </>
+
+      <main className="fs-main">
+        <Outlet/>
+      </main>
+
+      <footer className="fs-footer">
+        Created by Wong Chang Sheng as part of Mission 10 submission @ Sigmaschool 2026
+      </footer>
+    </div>
   )
 }
 
@@ -40,7 +52,6 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Every page sits inside Layout, so the navbar shows everywhere */}
           <Route element={<Layout />}>
             <Route path="/login" element={<Login />} />
 

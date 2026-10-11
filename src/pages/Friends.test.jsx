@@ -35,14 +35,14 @@ beforeEach(() => {
 
 test('searching shows only the matching users', async () => {
   render(<Friends />)
-  fireEvent.change(screen.getByPlaceholderText('Search by username'), { target: { value: 'ali' } })
+  fireEvent.change(await screen.findByPlaceholderText('Search by username'), { target: { value: 'ali' } })
   expect(await screen.findByText('alice')).toBeTruthy()
   expect(screen.queryByText('bob')).toBeNull()
 })
 
 test('sending a friend request marks the user as pending', async () => {
   render(<Friends />)
-  fireEvent.change(screen.getByPlaceholderText('Search by username'), { target: { value: 'bob' } })
+  fireEvent.change(await screen.findByPlaceholderText('Search by username'), { target: { value: 'bob' } })
   fireEvent.click(await screen.findByText('Add friend'))
   expect(await screen.findByText('Pending')).toBeTruthy()
   expect(apiFetch).toHaveBeenCalledWith('/friendships', {

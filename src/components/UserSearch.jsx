@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, Form, ListGroup } from 'react-bootstrap';
 import { apiFetch } from '../services/helpers';
 import { useAuth } from '../context/AuthContext';
@@ -7,12 +7,36 @@ export default function UserSearch({ users, friendships, fetchFriendships }) {
   const { session } = useAuth();
   const token = session.access_token;
   const [search, setSearch] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(null);
 
-  const results = search
-    ? users.filter((u) => u.username.toLowerCase().includes(search.toLowerCase()))
-    : [];
+  function handleSearch(value) {
+    setSearch(value);
+    // Show the loading state while typing, or clear the results if the box was emptied
+    setLoading(Boolean(value));
+    if (!value) {
+      setResults([]);
+    }
+  }
 
+  useEffect(() => {
+    if (!search) {
+      return;
+    }
+
+    // Debounce: only search once the user stops typing for 500ms
+    const getData = setTimeout(() => {
+      // Find from the users array where the username matches the search query
+      setResults(users.filter((u) => u.username.toLowerCase().includes(search.toLowerCase())));
+      setLoading(false);
+    }, 500);
+
+    // Clean up debouncing
+    return () => clearTimeout(getData);
+  }, [search, users]);
+
+  // Delete
   async function sendRequest(userId, status) {
     setSending(userId);
     try {
@@ -27,27 +51,29 @@ export default function UserSearch({ users, friendships, fetchFriendships }) {
   }
 
   return (
-    <Card className="mb-4">
+    <Card className="fs-panel">
+      <Card.Header>Find people</Card.Header>
       <Card.Body>
-        <Card.Title>Find people</Card.Title>
         <Form.Control
           placeholder="Search by username"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
           className="mb-3"
         />
+        {loading && <p className="fs-muted mb-0">Searching...</p>}
+        {!loading && search && results.length === 0 && <p className="fs-muted mb-0">No adventurers found.</p>}
         <ListGroup>
-          {results.map((u) => {
+          {!loading && results.map((u) => {
             const status = friendships.find((f) => f.other_id === u.id)?.status;
             return (
               <ListGroup.Item key={u.id} className="d-flex justify-content-between align-items-center">
                 {u.username}
                 {status === 'pending' || status === 'accepted' ? (
-                  <Button size="sm" variant="secondary" disabled>
+                  <Button size="sm" variant="fs-silver" disabled>
                     {status === 'pending' ? 'Pending' : 'Friends'}
                   </Button>
                 ) : (
-                  <Button size="sm" onClick={() => sendRequest(u.id, status)} disabled={sending === u.id}>
+                  <Button size="sm" variant="fs-gold" onClick={() => sendRequest(u.id, status)} disabled={sending === u.id}>
                     {sending === u.id ? 'Sending...' : 'Add friend'}
                   </Button>
                 )}
