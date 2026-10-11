@@ -1,16 +1,30 @@
-# React + Vite
+# ![Fantasorium logo](./src/assets/Fantasorium.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A project built to let people create posts and befriend one another.
 
-Currently, two official plugins are available:
+![Project Screenshot](./src/assets/Mission10.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Features include:
+- Login and registration with Supabase Auth
+- OAuth support to allow registration or logging in via Google
+- Create public or friends-only posts
+- Infinitely scrolling feed
+- User search to find users to befriend
+- Friends list and unfriending
+- User profile page
 
-## React Compiler
+Built with:
+- JavaScript (ES6)
+- PostgreSQL
+- React
+- HTML
+- CSS
+- Bootstrap
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Deployed with:
+- Vercel: For frontend and backend service
+  - Backend service can be found here: https://github.com/cswong235/fantasorium-backend
+- Supabase: For database hosting
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Links
+- Vercel link: https://fantasorium-frontend-bzo097jik-cs-wong.vercel.app/
