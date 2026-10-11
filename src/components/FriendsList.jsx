@@ -20,11 +20,11 @@ export default function FriendsList({ users, friendships, fetchFriendships }) {
   }
 
   return (
-    <Card className="mb-4">
+    <Card className="fs-panel">
+      <Card.Header>Your friends</Card.Header>
       <Card.Body>
-        <Card.Title>Your friends</Card.Title>
         {friends.length === 0 ? (
-          <p className="mb-0">No friends yet.</p>
+          <p className="fs-muted mb-0">No friends yet.</p>
         ) : (
           <ListGroup>
             {friends.map((f) => (
@@ -32,7 +32,7 @@ export default function FriendsList({ users, friendships, fetchFriendships }) {
                 {users.find((u) => u.id === f.other_id)?.username}
                 <Button
                   size="sm"
-                  variant="outline-danger"
+                  variant="fs-red"
                   onClick={() => unfriend(f.other_id)}
                   disabled={removing === f.other_id}
                 >

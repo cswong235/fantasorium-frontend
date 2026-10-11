@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { supabase } from '../supabaseClient';
 import { apiFetch } from '../services/helpers';
 import { useAuth } from '../context/AuthContext';
@@ -47,7 +48,10 @@ export default function Login() {
   }
 
   async function googleLogin() {
-    await supabase.auth.signInWithOAuth({provider: 'google'});
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
   }
 
   function toggleMode() {
@@ -56,38 +60,49 @@ export default function Login() {
   }
 
   return (
-    <div className="card">
-      <h2>{mode === 'signup' ? 'Create an account' : 'Welcome back'}</h2>
-      <form onSubmit={submit}>
-        <input placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        {mode === 'signup' ? 
-            <input
+    <Card className="fs-panel fs-login">
+      <Card.Header as="h3">{mode === 'signup' ? 'Create an account' : 'Welcome back'}</Card.Header>
+      <Card.Body>
+        <Form onSubmit={submit}>
+          <Form.Group className="mb-3" controlId="loginEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="loginPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Form.Group>
+          {mode === 'signup' && (
+            <Form.Group className="mb-3" controlId="loginConfirmPassword">
+              <Form.Label>Confirm password</Form.Label>
+              <Form.Control
                 placeholder="Confirm password"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-            /> 
-            : ''}
-        {error && <p className="error">{error}</p>}
-        <button type="submit" disabled={busy}>
-          {mode === 'signup' ? 'Sign up' : 'Log in'}
-        </button>
-      </form>
-      <hr />
-      <button className="ghost" onClick={googleLogin} type="button">
-        Continue with Google
-      </button>
-      <button className="ghost" type="button" onClick={toggleMode}>
-        {mode === 'signup' ? 'Already have an account? Log in' : "Don't have an account? Sign up"}
-      </button>
-    </div>
+              />
+            </Form.Group>
+          )}
+          {error && <Alert className="fs-alert py-2">{error}</Alert>}
+          <Button type="submit" variant="fs-gold" className="w-100" disabled={busy}>
+            {mode === 'signup' ? 'Sign up' : 'Log in'}
+          </Button>
+        </Form>
+        <div className="fs-divider">~ or ~</div>
+        <Button variant="fs-silver" className="w-100 mb-2" onClick={googleLogin} type="button">
+          Continue with Google
+        </Button>
+        <Button variant="fs-link" className="w-100" type="button" onClick={toggleMode}>
+          {mode === 'signup' ? 'Already have an account? Log in' : "Don't have an account? Sign up"}
+        </Button>
+      </Card.Body>
+    </Card>
   );
 }

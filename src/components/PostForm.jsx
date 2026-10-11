@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Container, Form } from 'react-bootstrap';
+import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { apiFetch } from '../services/helpers';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../supabaseClient';
@@ -67,7 +67,9 @@ export default function PostForm({ fetchPosts }){
     }
 
     return(
-        <Container>
+        <Card className="fs-panel">
+            <Card.Header>Share a Tale</Card.Header>
+            <Card.Body>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="postTitle">
                     <Form.Label>Title</Form.Label>
@@ -125,12 +127,13 @@ export default function PostForm({ fetchPosts }){
                     </div>
                 </Form.Group>
 
-                {error && <p className="text-danger">{error}</p>}
+                {error && <Alert className="fs-alert py-2">{error}</Alert>}
 
-                <Button type="submit" disabled={loading}>
+                <Button type="submit" variant="fs-green" className="w-100" disabled={loading}>
                     {loading ? 'Posting...' : 'Post'}
                 </Button>
             </Form>
-        </Container>
+            </Card.Body>
+        </Card>
     )
 }

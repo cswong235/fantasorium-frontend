@@ -24,18 +24,18 @@ export default function FriendRequests({ users, friendships, fetchFriendships })
   }
 
   return (
-    <Card className="mb-4">
+    <Card className="fs-panel">
+      <Card.Header>Friend requests</Card.Header>
       <Card.Body>
-        <Card.Title>Friend requests</Card.Title>
         <ListGroup>
           {requests.map((f) => (
             <ListGroup.Item key={f.id} className="d-flex justify-content-between align-items-center">
               {users.find((u) => u.id === f.user_id)?.username}
               <div>
-                <Button size="sm" className="me-2" onClick={() => respond(f.id, 'accepted')} disabled={responding?.id === f.id}>
+                <Button size="sm" variant="fs-green" className="me-2" onClick={() => respond(f.id, 'accepted')} disabled={responding?.id === f.id}>
                   {responding?.id === f.id && responding.status === 'accepted' ? 'Accepting...' : 'Accept'}
                 </Button>
-                <Button size="sm" variant="outline-secondary" onClick={() => respond(f.id, 'rejected')} disabled={responding?.id === f.id}>
+                <Button size="sm" variant="fs-red" onClick={() => respond(f.id, 'rejected')} disabled={responding?.id === f.id}>
                   {responding?.id === f.id && responding.status === 'rejected' ? 'Rejecting...' : 'Reject'}
                 </Button>
               </div>
